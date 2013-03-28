@@ -7,14 +7,17 @@
 
 //XBee Setup
 XBee xbee = XBee();
-uint8_t payload[] = {0, 0, 0, 0};
+uint8_t payload[] = {0, 0, 0, 0, 0};
 XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x408d6448);
 Tx64Request tx = Tx64Request(addr64, payload, sizeof(payload));
 TxStatusResponse txStatus = TxStatusResponse();
 
 //SENSORS
 const int sensorIR = 2;
-float irValue, irInches, irCm;
+const int pwPin = 5;
+int arraysize = 1;
+float irValue, irInches, irCm, ultrasonicInches;
+long pulse;
 
 
 Servo servo1;
@@ -117,6 +120,21 @@ int irSensor(){
   return (int)irInches;
 }
 
+int ultrasonicSensor(){
+  pinMode(pwPin, INPUT);
+  /*for(int i = 0; i < arraysize; i++)
+  {								    
+    pulse = pulseIn(pwPin, HIGH);
+    rangevalue[i] = pulse/147;
+    delay(10);
+  }
+  */
+  pulse = pulseIn(pwPin, HIGH);
+  ultrasonicInches = pulse/147;
+  return (int)ultrasonicInches;
+  
+}
+
 void xbeeSend(){
   
  xbee.send(tx);
@@ -177,9 +195,8 @@ void drive(int driveSpeed, int time){
   payload[0] = (uint8_t)(metersX / 50);
   payload[1] = (uint8_t)(metersY / 50);
   payload[2] = (uint8_t)irSensor();
-  payload[3] = orientationNum;
-  //payload[0] = 1;
-  //payload[1] = 2;
+  payload[3] = (uint8_t)ultrasonicSensor();
+  payload[4] = orientationNum;
   xbeeSend();
   }
   
