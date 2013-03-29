@@ -28,6 +28,7 @@ int speed = 100;
 int metersX = 0;
 int metersY = 0;
 char *orientation = "+X";
+uint8_t orientationNum = 0;
 
 double zeroValue[5] = {-200, 44, 660, 52.3, -18.5}; // Found by experimenting
 
@@ -156,7 +157,7 @@ void xbeeSend(){
   
     // after sending a tx request, we expect a status response
     // wait up to 5 seconds for the status response
-    if (xbee.readPacket(300)) {
+    if (xbee.readPacket(100)) {
         // got a response!
 
         // should be a znet tx status            	
@@ -167,9 +168,12 @@ void xbeeSend(){
   
   
 }
-void drive(int driveSpeed, int time){
+void drive(int driveSpeed, double distance){
   
-  uint8_t orientationNum = 0;
+  long time = distance * 1000 / .033;//25.4
+  Serial.println(time);
+  
+  
   
   int tempX = 0;
   int tempY = 0;
@@ -180,24 +184,38 @@ void drive(int driveSpeed, int time){
   {
   servo1.write(1527-driveSpeed);
   servo2.write(1560+driveSpeed);
+  Serial.println(i);
   
   //printRaw2();
   //actually working in milimeters
-  if (orientation == "+X"){
+  
+  if (orientationNum == 0){
   metersX+=1;
-  orientationNum = 0;
+  //orientationNum = 0;
   }
-  else if (orientation == "+Y"){
+  else if (orientationNum == 1){
+    
+  }
+  else if (orientationNum == 2){
   metersY+=1;
-  orientationNum = 1;
+  //orientationNum = 1;
   }
-  else if (orientation =="-X"){
+  else if (orientationNum == 3){
+    
+  }
+  else if (orientationNum == 4){
   metersX-=1;
-  orientationNum = 2;
+  //orientationNum = 2;
   }
-  else if (orientation =="-Y"){
+  else if (orientationNum == 5){
+    
+  }
+  else if (orientationNum == 6){
   metersY-=1;
-  orientationNum = 3;
+  //orientationNum = 3;
+  }
+  else if (orientationNum == 7){
+    
   }
   
   //tempX = (int)metersX/5;
@@ -215,7 +233,7 @@ void drive(int driveSpeed, int time){
   xbeeSend();
   }
   
-  delay(15);
+  //delay(15);
   }
   
   //servo1.write(1530);
@@ -232,7 +250,7 @@ void turnRight(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 310; i++)
+  for (int i = 0; i < 370; i++)
   {
   servo1.write(1530-driveSpeed);
   servo2.write(1535-driveSpeed);
@@ -262,7 +280,7 @@ void turnLeft(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 310; i++)
+  for (int i = 0; i < 350; i++)
   {
   servo1.write(1530+driveSpeed);
   servo2.write(1550+driveSpeed);
@@ -287,6 +305,63 @@ void turnLeft(int driveSpeed){
   
   return;
 }
+void turn45Left(int driveSpeed){
+  servo1.attach(8);
+  servo2.attach(9);
+  
+  for (int i = 0; i < 200; i++)//175 200
+  {
+  servo1.write(1530+driveSpeed);
+  servo2.write(1535+driveSpeed);//1550
+  
+  //printRaw2();
+  delay(20);
+  }
+  
+  //servo1.write(1530);
+  //servo2.write(1550);
+  servo1.detach();
+  servo2.detach();
+  
+  if (orientationNum == 7)
+    orientationNum = 0;
+  else
+    orientationNum++;
+  
+  return;
+}
+
+void turn45Right(int driveSpeed){
+  servo1.attach(8);
+  servo2.attach(9);
+  
+  for (int i = 0; i < 185; i++)
+  {
+  servo1.write(1530-driveSpeed);
+  servo2.write(1535-driveSpeed);
+  
+  //printRaw2();
+  delay(20);
+  }
+  
+  servo1.detach();
+  servo2.detach();
+  
+  if (orientationNum == 0)
+    orientationNum = 7;
+  else
+    orientationNum--;
+    
+  payload[0] = 0;
+  payload[1] = 0;
+  payload[2] = (uint8_t)irSensor();
+  payload[3] = (uint8_t)ultrasonicSensor();
+  payload[4] = orientationNum;
+  xbeeSend();
+  
+  return;
+}
+
 
 
 void printRaw(){
@@ -319,7 +394,7 @@ void loop(){
 //delay(200);
 //turnRight(50);
 
-drive(50,13000);
+/*drive(50,13000);
 delay(200);
 turnLeft(50);
 delay(200);
@@ -332,7 +407,39 @@ delay(200);
 turnLeft(50);
 delay(200);
 drive(50,27000);
+delay(50000);*/
+//drive(50,1);//.04 m/s 
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);
+//drive(50,.1);
+delay(3000);
+turn45Right(50);//9
+//drive(50,.1);
+delay(3000);
+turn45Right(50);//10
+//drive(50,.1);
 delay(50000);
+
     
 }
 
