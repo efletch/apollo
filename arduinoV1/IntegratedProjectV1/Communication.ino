@@ -1,10 +1,5 @@
 //Communication
 
-
-
-#define gyroAddress 0x68
-#define adxlAddress 0x53
-
 //XBee Setup
 //XBee xbee = XBee();
 uint8_t payload[] = {0, 0, 0, 0, 0};
@@ -27,5 +22,15 @@ void xbeeSend(){
         }
     }
   
+  
+}
+
+void xbeeCollect(){
+  
+  payload[0] = (uint8_t)(metersX / 50);
+  payload[1] = (uint8_t)(metersY / 50);
+  payload[2] = (uint8_t)irSensor();
+  payload[3] = (uint8_t)ultrasonicSensor();
+  payload[4] = orientationNum;
   
 }

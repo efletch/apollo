@@ -1,6 +1,12 @@
 #include <XBee.h>
 
 XBee xbee = XBee();
+unsigned long timer, timerTracker;
+
+int metersX = 0;
+int metersY = 0;
+
+uint8_t orientationNum = 0;
 
 void setup() {  
   pinMode(8, OUTPUT);
@@ -8,6 +14,8 @@ void setup() {
   
   Serial.begin(9600);
   xbee.setSerial(Serial);
+  
+  timer = micros();
   
   delay(10000);
 

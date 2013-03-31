@@ -6,83 +6,63 @@ Servo servo1;
 Servo servo2;
 int speed = 100;
 
-int metersX = 0;
-int metersY = 0;
-char *orientation = "+X";
-uint8_t orientationNum = 0;
+
 
 void drive(int driveSpeed, double distance){
   
-  long time = distance * 1000 / .033;//25.4
+  long time = distance * 1000000 / .033;//25.4s per meter, length of time we need to drive for
+  timerTracker = timer;//Timestamp at start of drive function
   Serial.println(time);
-  
-  
   
   int tempX = 0;
   int tempY = 0;
   
   servo1.attach(8);
   servo2.attach(9);
-  for (int i = 0; i < (time / 15); i++)
+  
+  while (timer < (timerTracker + time))//Not yet handling turns taken
   {
-  servo1.write(1527-driveSpeed);
-  servo2.write(1560+driveSpeed);
-  Serial.println(i);
-  
-  //printRaw2();
-  //actually working in milimeters
-  
-  if (orientationNum == 0){
-  metersX+=1;
-  //orientationNum = 0;
-  }
-  else if (orientationNum == 1){
+    servo1.write(1527-driveSpeed);
+    servo2.write(1560+driveSpeed);
     
-    
+    //Let's say we sample every tenth of a meter, 2.54 seconds
+   if((timer - timerTracker) % 2540000)//Remember micros
+    {
+      switch(orientationNum)
+      {
+        case 0:
+          metersX+=1;
+          break;
+        case 1:
+          //Need to increase X and Y .707, not sure how to do that and be able to send
+          //.0707 meters traveled
+          break;
+        case 2:
+          metersY+=1;//Moved a tenth of a meter
+          break;
+        case 3:
+          //Need to increase Y .707, decrease X .707
+          break;
+        case 4:
+          metersX-=1;//Moved a tenth of a meter
+          break;
+        case 5:
+          //Need to decrease X and Y .707
+          break;
+        case 6:
+          metersY-=1;//Moved a tenth of a meter
+          break;
+        case 7:
+          //Need to increase X .707, decrease Y .707
+          break;
+      }
+        
+     xbeeCollect();
+     xbeeSend();
+      
+    }
   }
-  else if (orientationNum == 2){
-  metersY+=1;
-  //orientationNum = 1;
-  }
-  else if (orientationNum == 3){
-    
-  }
-  else if (orientationNum == 4){
-  metersX-=1;
-  //orientationNum = 2;
-  }
-  else if (orientationNum == 5){
-    
-  }
-  else if (orientationNum == 6){
-  metersY-=1;
-  //orientationNum = 3;
-  }
-  else if (orientationNum == 7){
-    
-  }
-  
-  //tempX = (int)metersX/5;
-  //tempY = (int)metersY/5;
-  
-  //payload[0] = (uint8_t)tempX;
-  //payload[1] = (uint8_t)tempY;
-  if((metersX % 50 == 0) && (metersY % 50 == 0))
-  {
-  payload[0] = (uint8_t)(metersX / 50);
-  payload[1] = (uint8_t)(metersY / 50);
-  payload[2] = (uint8_t)irSensor();
-  payload[3] = (uint8_t)ultrasonicSensor();
-  payload[4] = orientationNum;
-  xbeeSend();
-  }
-  
-  //delay(15);
-  }
-  
-  //servo1.write(1530);
-  //servo2.write(1570);
-  
+
   servo1.detach();
   servo2.detach();
   
