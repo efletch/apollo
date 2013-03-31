@@ -195,6 +195,7 @@ void drive(int driveSpeed, double distance){
   }
   else if (orientationNum == 1){
     
+    
   }
   else if (orientationNum == 2){
   metersY+=1;
@@ -351,13 +352,17 @@ void turn45Right(int driveSpeed){
     orientationNum = 7;
   else
     orientationNum--;
-    
-  payload[0] = 0;
-  payload[1] = 0;
-  payload[2] = (uint8_t)irSensor();
-  payload[3] = (uint8_t)ultrasonicSensor();
-  payload[4] = orientationNum;
-  xbeeSend();
+  
+  for (int j = 0; j < 10; j ++)
+  {  
+    payload[0] = 0;
+    payload[1] = 0;
+    payload[2] = (uint8_t)irSensor();
+    payload[3] = (uint8_t)ultrasonicSensor();
+    payload[4] = orientationNum;
+    xbeeSend();
+    delay(20);
+  }
   
   return;
 }
