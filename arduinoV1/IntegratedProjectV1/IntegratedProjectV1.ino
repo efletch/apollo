@@ -3,8 +3,8 @@
 XBee xbee = XBee();
 unsigned long timer, timerTracker;
 
-int metersX = 0;
-int metersY = 0;
+float metersX = 0.0;
+float metersY = 0.0;
 
 uint8_t orientationNum = 0;
 

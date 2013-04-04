@@ -31,29 +31,37 @@ void drive(int driveSpeed, double distance){
       switch(orientationNum)
       {
         case 0:
-          metersX+=1;
+          metersX+=1.0;
           break;
         case 1:
           //Need to increase X and Y .707, not sure how to do that and be able to send
           //.0707 meters traveled
+          metersX+=0.707;
+          metersY+=0.707;
           break;
         case 2:
-          metersY+=1;//Moved a tenth of a meter
+          metersY+=1.0;//Moved a tenth of a meter
           break;
         case 3:
           //Need to increase Y .707, decrease X .707
+          metersX-=0.707;
+          metersY+=0.707;
           break;
         case 4:
-          metersX-=1;//Moved a tenth of a meter
+          metersX-=1.0;//Moved a tenth of a meter
           break;
         case 5:
           //Need to decrease X and Y .707
+          metersX-=0.707;
+          metersY-=0.707;
           break;
         case 6:
           metersY-=1;//Moved a tenth of a meter
           break;
         case 7:
           //Need to increase X .707, decrease Y .707
+          metersX+=0.707;
+          metersY-=0.707;
           break;
       }
         
