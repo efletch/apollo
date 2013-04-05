@@ -88,9 +88,9 @@ public class ZNetReceiverExample {
                                         String line = response.value();
                                         
                                        String [] array = line.split(" ");
-                                       //scale data by multiplying by 100 to get into millimeters
-                                       double xdata = (((Integer.parseInt(array[1]))*100) + ((Integer.parseInt(array[2]))*10) + ((Integer.parseInt(array[3]))) + ((Integer.parseInt(array[4]))/10))*100;  //x position (1 is 100s place, 2 is 10s place, 3 is 1s place, 4 is the decimal value), converts into millimeters
-                                       double ydata = (((Integer.parseInt(array[6]))*100) + ((Integer.parseInt(array[7]))*10) + ((Integer.parseInt(array[8]))) + ((Integer.parseInt(array[9]))/10))*100; //y position (1 is 100s place, 2 is 10s place, 3 is 1s place, 4 is the decimal value), converts into millimeters
+                                       //scale data by multiplying by 100 to get into millimeters (originally in tenths of a meter)
+                                       double xdata = (((Integer.parseInt(array[1]))*100) + ((Integer.parseInt(array[2]))*10) + ((Integer.parseInt(array[3]))) + ((Integer.parseInt(array[4]))/10.0))*100;  //x position (1 is 100s place, 2 is 10s place, 3 is 1s place, 4 is the decimal value), converts into millimeters
+                                       double ydata = (((Integer.parseInt(array[6]))*100) + ((Integer.parseInt(array[7]))*10) + ((Integer.parseInt(array[8]))) + ((Integer.parseInt(array[9]))/10.0))*100; //y position (1 is 100s place, 2 is 10s place, 3 is 1s place, 4 is the decimal value), converts into millimeters
                                        
                                        if ((Integer.parseInt(array[0]) == 0))
                                        {
@@ -118,6 +118,9 @@ public class ZNetReceiverExample {
                                        //for ultrasonic based points
                                        double pointxU = 0;
                                        double pointyU = 0;
+                                       
+                                       double posobjX = 0; //final x value of object's position
+                                       double posobjY = 0; //final y value of object's position
                                        
                                      //direction 0: increase x
                                        if(direction ==0)
@@ -205,15 +208,23 @@ public class ZNetReceiverExample {
                                        
                                         System.out.println(xdata + " " + ydata+ " " + infrared + " " + ultrasonic + " " + distance + " " + direction);
                                         
-                                        prt.println(pointx + " " + pointy + " " + "130"); //130 is the set z value, infrared based points
+                                        if( (Math.abs(pointx-pointxU) < 75) && (Math.abs(pointy-pointyU) < 75))
+                                        {
+                                        	posobjX = (pointx + pointxU)/2; //average the two X coords together
+                                        	posobjY = (pointy + pointyU)/2; //average the two Y coords together
+                                        	
+                                        	prt.println(posobjX + " " + posobjY + " " + "130");
+                                        }
+                                        
+                                       // prt.println(pointx + " " + pointy + " " + "130"); //130 is the set z value, infrared based points
                                         
                                        // prt1.println(infrared + " " + ultrasonic); //infrared vs ultrasonic based points
                                         
-                                        prt.println(pointxU + " " + pointyU + " " + "130"); //ultrasonic based points
+                                       // prt.println(pointxU + " " + pointyU + " " + "130"); //ultrasonic based points
                                         
-                                        prt1.println((pointx-pointxU)+ " "+ (pointy-pointyU) + " " + "0");
+                                        prt1.println(infrared+ " "+ ultrasonic + " " + direction);
                                         
-                                        System.out.println("Api id: " + response.getApiId());
+                                       // System.out.println("Api id: " + response.getApiId());
                                         
                                         
                                         if (response.getApiId() == ApiId.TX_STATUS_RESPONSE) {
