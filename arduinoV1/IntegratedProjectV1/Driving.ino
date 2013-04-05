@@ -127,12 +127,9 @@ void turn45Right(int driveSpeed){
   
   for (int j = 0; j < 10; j ++)
   {  
-    payload[0] = 0;
-    payload[1] = 0;
-    payload[2] = (uint8_t)irSensor();
-    payload[3] = (uint8_t)ultrasonicSensor();
-    payload[4] = orientationNum;
+    xbeeCollect();
     xbeeSend();
+
     delay(20);
   }
   
