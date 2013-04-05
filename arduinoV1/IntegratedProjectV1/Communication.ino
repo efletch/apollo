@@ -15,7 +15,7 @@ void xbeeSend(){
   
     // after sending a tx request, we expect a status response
     // wait up to 5 seconds for the status response
-    if (xbee.readPacket(1)) {
+    if (xbee.readPacket(100)) {
         // got a response!
 
         // should be a znet tx status            	
@@ -27,7 +27,7 @@ void xbeeSend(){
   
 }
 
-void xbeeCollect(){
+void xbeeCollect(int ir, int ultra){
   //Multiply meters by ten so that the decimal is the fourth most significant digit
   //Remember the transmitted values are in tenths of meters
   uint8_t negativeX = 1;
@@ -47,8 +47,10 @@ void xbeeCollect(){
   payload[7] = (uint8_t)(((((int)abs(metersY))*10)/100)%10);
   payload[8] = (uint8_t)(((((int)abs(metersY))*10)/10)%10);
   payload[9] = (uint8_t)(((((int)abs(metersY))*10)/1)%10);
-  payload[10] = (uint8_t)irSensor();
-  payload[11] = (uint8_t)ultrasonicSensor();
+  //payload[10] = (uint8_t)irSensor();
+  payload[10] = (uint8_t)ir;
+  //payload[11] = (uint8_t)ultrasonicSensor();
+  payload[11] = (uint8_t)ultra;
   payload[12] = orientationNum;
   
 }

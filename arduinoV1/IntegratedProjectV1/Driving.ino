@@ -10,23 +10,34 @@ int speed = 100;
 
 void drive(int driveSpeed, double distance){
   
-  long time = distance * 1000000 / .033;//25.4s per meter, length of time we need to drive for
-  timerTracker = timer;//Timestamp at start of drive function
-  Serial.println(time);
-  
+  //long time = distance * 1000 / .033;//25.4s per meter, length of time we need to drive for
+  unsigned long time = distance * 1000 / .0439;//22.8s per meter
+  int tempIR = 0;
+  int tempUltra = 0;
+
+  //Serial.println(time);
+  //Serial.println(timerTracker);
+  //Serial.println(timer);
+
   int tempX = 0;
   int tempY = 0;
   
   servo1.attach(8);
   servo2.attach(9);
   
-  while (timer < (timerTracker + time))//Not yet handling turns taken
+  timer = millis();
+  timerTracker = timer;//Timestamp at start of drive function
+  
+  remainder = 0;//remainder is time left + idle time (time it took to turn)
+  
+  while (timer < (timerTracker + time + remainder))//Not yet handling turns taken
   {
-    servo1.write(1527-driveSpeed);
+    //objectCheck(time);//Check if there is an object and act
+    servo1.write(1525-driveSpeed);
     servo2.write(1560+driveSpeed);
     
     //Let's say we sample every tenth of a meter, 2.54 seconds
-   if((timer - timerTracker) % 2540000)//Remember micros
+   if(((timer - timerTracker) % 2320) == 0)//Remember micros
     {
       switch(orientationNum)
       {
@@ -64,11 +75,14 @@ void drive(int driveSpeed, double distance){
           metersY-=0.707;
           break;
       }
-        
-     xbeeCollect();
+     tempIR = irSensor();
+     tempUltra = ultrasonicSensor();
+     objectCheck(time, tempIR, tempUltra);//Check if there is an object and act   
+     xbeeCollect(tempIR, tempUltra);
      xbeeSend();
       
     }
+    timer = millis();
   }
 
   servo1.detach();
@@ -108,7 +122,7 @@ void turn45Right(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 185; i++)
+  for (int i = 0; i < 130; i++)
   {
   servo1.write(1530-driveSpeed);
   servo2.write(1535-driveSpeed);
@@ -125,13 +139,13 @@ void turn45Right(int driveSpeed){
   else
     orientationNum--;
   
-  for (int j = 0; j < 10; j ++)
+  /*for (int j = 0; j < 10; j ++)
   {  
     xbeeCollect();
     xbeeSend();
 
     delay(20);
-  }
+  }*/
   
   return;
 }

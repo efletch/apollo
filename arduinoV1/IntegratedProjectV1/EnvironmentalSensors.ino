@@ -50,3 +50,29 @@ void isort(int *a, int n){
   }
 }
 
+void objectCheck(unsigned long driveTime, int ir, int ultra){
+  //int ir = irSensor();
+  //int ultra = ultrasonicSensor();
+
+  unsigned long remainingTime, timeStamp1, timeStamp2, idleTime;
+  //if (((ir+ultra)/2) < 15)//if average is less than 15 inches, turn
+   if (ir < 15)
+    {
+      timer = millis();
+      timeStamp1 = timer;
+      remainingTime = (timerTracker + driveTime) - timeStamp1;
+      
+      turn45Right(50);
+      
+      timer = millis();
+      timeStamp2 = timer;
+      
+      idleTime = timeStamp2 - timeStamp1;
+      
+      remainder = remainingTime + idleTime;
+      
+      servo1.attach(8);
+      servo2.attach(9);
+    }
+
+}

@@ -1,7 +1,7 @@
 #include <XBee.h>
 
 XBee xbee = XBee();
-unsigned long timer, timerTracker;
+unsigned long timer, timerTracker, remainder;
 
 float metersX = 0.0;
 float metersY = 0.0;
@@ -15,42 +15,46 @@ void setup() {
   Serial.begin(9600);
   xbee.setSerial(Serial);
   
-  timer = micros();
+  timer = millis();
   
   delay(10000);
 
 }
 
 void loop(){
-  turn45Right(50);
-//drive(50,.1);
+  timer = millis();
+  drive(50,10);
+
+  //drive(50,.5);
+/*turn45Right(50);
+drive(50,.1);
 delay(3000);
 turn45Right(50);
-//drive(50,.1);
+drive(50,.1);
 delay(3000);
 turn45Right(50);
-//drive(50,.1);
+drive(50,.1);
 delay(3000);
 turn45Right(50);
+drive(50,.1);
+delay(3000);
+//turn45Right(50);
 //drive(50,.1);
 delay(3000);
-turn45Right(50);
+//turn45Right(50);
 //drive(50,.1);
 delay(3000);
-turn45Right(50);
+//turn45Right(50);
 //drive(50,.1);
 delay(3000);
-turn45Right(50);
+//turn45Right(50);
 //drive(50,.1);
 delay(3000);
-turn45Right(50);
+//turn45Right(50);//9
 //drive(50,.1);
 delay(3000);
-turn45Right(50);//9
-//drive(50,.1);
-delay(3000);
-turn45Right(50);//10
-//drive(50,.1);
+//turn45Right(50);//10
+//drive(50,.1);*/
 delay(50000);
 
 }
