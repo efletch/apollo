@@ -15,7 +15,7 @@ void xbeeSend(){
   
     // after sending a tx request, we expect a status response
     // wait up to 5 seconds for the status response
-    if (xbee.readPacket(100)) {
+    if (xbee.readPacket(1)) {
         // got a response!
 
         // should be a znet tx status            	

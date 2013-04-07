@@ -11,7 +11,7 @@ int speed = 100;
 void drive(int driveSpeed, double distance){
   
   //long time = distance * 1000 / .033;//25.4s per meter, length of time we need to drive for
-  unsigned long time = distance * 1000 / .0439;//22.8s per meter
+  unsigned long time = distance * 1000 / .0485;//20.6s per meter
   int tempIR = 0;
   int tempUltra = 0;
 
@@ -33,11 +33,15 @@ void drive(int driveSpeed, double distance){
   while (timer < (timerTracker + time + remainder))//Not yet handling turns taken
   {
     //objectCheck(time);//Check if there is an object and act
-    servo1.write(1525-driveSpeed);
-    servo2.write(1560+driveSpeed);
+    //servo1.write(1525-driveSpeed);
+    //servo2.write(1560+driveSpeed);
     
-    //Let's say we sample every tenth of a meter, 2.54 seconds
-   if(((timer - timerTracker) % 2320) == 0)//Remember micros
+    servo1.write(64);
+    servo2.write(180);
+    
+    
+    //Let's say we sample every tenth of a meter, 2.06 seconds
+   if(((timer - timerTracker) % 2060) == 0)//Remember millis
     {
       switch(orientationNum)
       {
@@ -96,11 +100,12 @@ void turn45Left(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 200; i++)//175 200
+  for (int i = 0; i < 110; i++)//175 200
   {
-  servo1.write(1530+driveSpeed);
-  servo2.write(1535+driveSpeed);//1550
-  
+  //servo1.write(1530+driveSpeed);
+  //servo2.write(1535+driveSpeed);//1550
+  servo1.write(135);
+  servo2.write(135);
   //printRaw2();
   delay(20);
   }
@@ -122,11 +127,12 @@ void turn45Right(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 130; i++)
+  for (int i = 0; i < 110; i++)
   {
-  servo1.write(1530-driveSpeed);
-  servo2.write(1535-driveSpeed);
-  
+  //servo1.write(1530-driveSpeed);
+  //servo2.write(1535-driveSpeed);
+  servo1.write(64);
+  servo2.write(64);
   //printRaw2();
   delay(20);
   }

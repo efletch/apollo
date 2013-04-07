@@ -23,7 +23,7 @@ void setup() {
 
 void loop(){
   timer = millis();
-  drive(50,10);
+  drive(0,1);
 
   //drive(50,.5);
 /*turn45Right(50);

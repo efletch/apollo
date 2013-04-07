@@ -62,8 +62,8 @@ void objectCheck(unsigned long driveTime, int ir, int ultra){
       timeStamp1 = timer;
       remainingTime = (timerTracker + driveTime) - timeStamp1;
       
-      turn45Right(50);
-      
+      //turn45Right(50);
+      turn45Left(50);
       timer = millis();
       timeStamp2 = timer;
       
