@@ -11,7 +11,7 @@ int speed = 100;
 void drive(int driveSpeed, double distance){
   
   //long time = distance * 1000 / .033;//25.4s per meter, length of time we need to drive for
-  unsigned long time = distance * 1000 / .0485;//20.6s per meter
+  unsigned long time = distance * 1000 / .0592;//16.9s per meter
   int tempIR = 0;
   int tempUltra = 0;
 
@@ -40,8 +40,8 @@ void drive(int driveSpeed, double distance){
     servo2.write(180);
     
     
-    //Let's say we sample every tenth of a meter, 2.06 seconds
-   if(((timer - timerTracker) % 2060) == 0)//Remember millis
+    //Let's say we sample every tenth of a meter, 1.69 seconds
+   if(((timer - timerTracker) % 1690) == 0)//Remember millis
     {
       switch(orientationNum)
       {
@@ -100,7 +100,7 @@ void turn45Left(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 110; i++)//175 200
+  for (int i = 0; i < 70; i++)//110
   {
   //servo1.write(1530+driveSpeed);
   //servo2.write(1535+driveSpeed);//1550
@@ -127,7 +127,7 @@ void turn45Right(int driveSpeed){
   servo1.attach(8);
   servo2.attach(9);
   
-  for (int i = 0; i < 110; i++)
+  for (int i = 0; i < 70; i++)
   {
   //servo1.write(1530-driveSpeed);
   //servo2.write(1535-driveSpeed);

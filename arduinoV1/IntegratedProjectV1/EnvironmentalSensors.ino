@@ -64,6 +64,11 @@ void objectCheck(unsigned long driveTime, int ir, int ultra){
       
       //turn45Right(50);
       turn45Left(50);
+      delay(200);
+      turn45Left(50);
+      delay(200);
+      turn45Left(50);
+      delay(200);
       timer = millis();
       timeStamp2 = timer;
       
