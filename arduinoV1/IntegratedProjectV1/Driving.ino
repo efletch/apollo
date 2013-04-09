@@ -1,5 +1,6 @@
 //Driving
 #include <Servo.h>
+#include <HardwareSerial.h>
 
 
 Servo servo1;
@@ -12,6 +13,7 @@ void drive(int driveSpeed, double distance){
   
   //long time = distance * 1000 / .033;//25.4s per meter, length of time we need to drive for
   unsigned long time = distance * 1000 / .0592;//16.9s per meter
+  //unsigned long time = distance * 1000 / .0489;//20.5s per meter
   int tempIR = 0;
   int tempUltra = 0;
 
@@ -39,9 +41,10 @@ void drive(int driveSpeed, double distance){
     servo1.write(64);
     servo2.write(180);
     
-    
+    timer = millis();
     //Let's say we sample every tenth of a meter, 1.69 seconds
-   if(((timer - timerTracker) % 1690) == 0)//Remember millis
+    if (((timer - timerTracker) % 169) == 0)
+   //if(((timer - timerTracker) % 205) == 0)//Remember millis
     {
       switch(orientationNum)
       {
@@ -83,8 +86,14 @@ void drive(int driveSpeed, double distance){
      tempUltra = ultrasonicSensor();
      objectCheck(time, tempIR, tempUltra);//Check if there is an object and act   
      xbeeCollect(tempIR, tempUltra);
+     
+    
      xbeeSend();
-      
+     
+     //Serial.print("Meters X: %d Meters Y: %d\n",metersX,metersY);
+      //Serial.print(metersX);
+      //Serial.print("%t");
+      //Serial.println(metersY);
     }
     timer = millis();
   }
@@ -97,22 +106,35 @@ void drive(int driveSpeed, double distance){
 }
 
 void turn45Left(int driveSpeed){
-  servo1.attach(8);
+  //servo1.attach(8);
+  servo1.detach();
   servo2.attach(9);
   
-  for (int i = 0; i < 70; i++)//110
-  {
+  //for (int i = 0; i < 70; i++)//110
+  //{
   //servo1.write(1530+driveSpeed);
   //servo2.write(1535+driveSpeed);//1550
-  servo1.write(135);
-  servo2.write(135);
-  //printRaw2();
-  delay(20);
+  
+  timer = millis();
+  turnTimerTracker = timer;
+  
+  //while(timer<(turnTimerTracker+4500)){//1800ms for a turn
+  while (timer<(turnTimerTracker+4000)){
+  //servo1.write(135);
+  //servo2.write(135);
+  //servo1.write(100);
+  servo2.write(110);
+  
+  timer = millis();
   }
+  //printRaw2();
+  //delay(20);
+  //
+//}
   
   //servo1.write(1530);
   //servo2.write(1550);
-  servo1.detach();
+  //servo1.detach();
   servo2.detach();
   
   if (orientationNum == 7)

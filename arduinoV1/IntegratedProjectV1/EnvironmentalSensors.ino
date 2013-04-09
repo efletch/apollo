@@ -21,7 +21,7 @@ int irSensor(){
   return (int)irInches;
 }
 
-int ultrasonicSensor(){
+/*int ultrasonicSensor(){
   pinMode(pwPin, INPUT);
   for(int i = 0; i < arraysize; i++)
   {								    
@@ -33,6 +33,14 @@ int ultrasonicSensor(){
   //pulse = pulseIn(pwPin, HIGH);
   //ultrasonicInches = pulse/147;
   return (int)rangevalue[8];
+  
+}*/
+int ultrasonicSensor(){
+  pinMode(pwPin, INPUT);
+				    
+    pulse = pulseIn(pwPin, HIGH);
+    rangevalue[0] = pulse/147;
+  return (int)rangevalue[0];
   
 }
 
@@ -56,7 +64,7 @@ void objectCheck(unsigned long driveTime, int ir, int ultra){
 
   unsigned long remainingTime, timeStamp1, timeStamp2, idleTime;
   //if (((ir+ultra)/2) < 15)//if average is less than 15 inches, turn
-   if (ir < 15)
+   if (ir < 12)
     {
       timer = millis();
       timeStamp1 = timer;

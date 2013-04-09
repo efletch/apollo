@@ -2,8 +2,8 @@
 
 //XBee Setup
 //XBee xbee = XBee();
-uint8_t payload[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//X3 X2 X1 XDecimal, Y3 Y2 Y1 YDecimal, IR, Ultrasonic, Orientation
+uint8_t payload[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//X4 X3 X2 X1 XDecimal, Y4 Y3 Y2 Y1 YDecimal, IR, Ultrasonic, Orientation
 XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x408d6448);
 Tx64Request tx = Tx64Request(addr64, payload, sizeof(payload));
 TxStatusResponse txStatus = TxStatusResponse();
@@ -38,19 +38,21 @@ void xbeeCollect(int ir, int ultra){
     negativeY = 0;
   
   payload[0] = negativeX;
-  payload[1] = (uint8_t)(((((int)abs(metersX))*10)/1000)%10);//Most significant digit
-  payload[2] = (uint8_t)(((((int)abs(metersX))*10)/100)%10);//Second most significant
-  payload[3] = (uint8_t)(((((int)abs(metersX))*10)/10)%10);//Third most significant
-  payload[4] = (uint8_t)(((((int)abs(metersX))*10)/1)%10);//Fourth most significant
-  payload[5] = negativeY;
-  payload[6] = (uint8_t)(((((int)abs(metersY))*10)/1000)%10);
-  payload[7] = (uint8_t)(((((int)abs(metersY))*10)/100)%10);
-  payload[8] = (uint8_t)(((((int)abs(metersY))*10)/10)%10);
-  payload[9] = (uint8_t)(((((int)abs(metersY))*10)/1)%10);
+  payload[1] = (uint8_t)(((((int)abs(metersX))*10)/10000)%10);
+  payload[2] = (uint8_t)(((((int)abs(metersX))*10)/1000)%10);//Most significant digit
+  payload[3] = (uint8_t)(((((int)abs(metersX))*10)/100)%10);//Second most significant
+  payload[4] = (uint8_t)(((((int)abs(metersX))*10)/10)%10);//Third most significant
+  payload[5] = (uint8_t)(((((int)abs(metersX))*10)/1)%10);//Fourth most significant
+  payload[6] = negativeY;
+  payload[7] = (uint8_t)(((((int)abs(metersY))*10)/10000)%10);
+  payload[8] = (uint8_t)(((((int)abs(metersY))*10)/1000)%10);
+  payload[9] = (uint8_t)(((((int)abs(metersY))*10)/100)%10);
+  payload[10] = (uint8_t)(((((int)abs(metersY))*10)/10)%10);
+  payload[11] = (uint8_t)(((((int)abs(metersY))*10)/1)%10);
   //payload[10] = (uint8_t)irSensor();
-  payload[10] = (uint8_t)ir;
+  payload[12] = (uint8_t)ir;
   //payload[11] = (uint8_t)ultrasonicSensor();
-  payload[11] = (uint8_t)ultra;
-  payload[12] = orientationNum;
+  payload[13] = (uint8_t)ultra;
+  payload[14] = orientationNum;
   
 }
