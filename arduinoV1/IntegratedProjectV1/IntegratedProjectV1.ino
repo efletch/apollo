@@ -23,9 +23,10 @@ void setup() {
 
 void loop(){
   timer = millis();
+  //drive(50,.5);
   drive(50,20);
-  //drive(50,2);
  // turn45Left(50);
+  
   /*turn45Left(50);
   
   delay(500);
@@ -101,6 +102,6 @@ delay(3000);
 delay(3000);
 //turn45Right(50);//10
 //drive(50,.1);*/
-delay(50000);
+delay(15000);
 
 }

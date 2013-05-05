@@ -38,7 +38,7 @@ void drive(int driveSpeed, double distance){
     //servo1.write(1525-driveSpeed);
     //servo2.write(1560+driveSpeed);
     
-    servo1.write(64);
+    servo1.write(60);
     servo2.write(180);
     
     timer = millis();
